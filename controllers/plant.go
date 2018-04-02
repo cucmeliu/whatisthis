@@ -15,13 +15,28 @@ type PlantController struct {
 
 func (c *PlantController) URLMapping() {
 	c.Mapping("Post", c.Post)
-	//	c.Mapping("GetOne", c.Get)
+	c.Mapping("GetOne", c.Get)
 	//	c.Mapping("GetAll", c.GetAll)
 	//	c.Mapping("Put", c.Put)
 	//	c.Mapping("Delete", c.Delete)
 }
 
-func (this *PlantController) Get() {
+// GetOne ...
+// @Title Get One
+// @Description get User by id
+// @Param	id		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.User
+// @Failure 403 :id is empty
+// @router /:id [get]
+func (c *PlantController) Get() {
+	c.Data["Website"] = "beego.me"
+	c.Data["Email"] = "astaxie@gmail.com"
+
+	fmt.Println("get smt")
+	//c.TplName = "views/index.tpl"
+	c.Ctx.WriteString(models.GetAccessToken())
+
+	//c.ServeJSON()
 	//	var param models.Param_rec
 	//	param.User_token = this.GetString("user_token")
 	//	param.Src_base64 = this.GetString("src_base64")
@@ -41,32 +56,32 @@ func (this *PlantController) Get() {
 // @router / [post]
 func (c *PlantController) Post() {
 	var v models.Plant
-	token := models.GetToken()
+	token := models.GetAccessToken()
+
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		var rec models.Plant
-		c.RecogPlant(token, v.Img_base64, &rec)
-		fmt.Println()
+		c.RecogPlant(token, &v)
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
-		//		} else {
-		//			c.Data["json"] = err.Error()
-		//		}
+		c.Ctx.WriteString(v.Img_base64)
 	} else {
 		c.Data["json"] = err.Error()
+		fmt.Println("err.", err)
 	}
+
 	c.ServeJSON()
 }
 
-func (this *PlantController) RecogPlant(access_token, image_base64 string, rec_rst *models.Plant) {
+func (this *PlantController) RecogPlant(access_token string, rec_rst *models.Plant) {
 	url := "https://aip.baidubce.com/rest/2.0/image-classify/v1/plant?access_token=" + access_token
 	params := make(map[string]string)
-	params["image"] = image_base64
+	params["image"] = rec_rst.Img_base64
 
 	resp_str, err := utils.HttpPost(url, params)
+	fmt.Println("resp: ", resp_str)
 	_ = json.Unmarshal([]byte(resp_str), &rec_rst)
 
 	if err == nil {
-		// fmt.Println("encoded err", err)
+		fmt.Println("encoded err", err)
 		panic(err)
 	}
 

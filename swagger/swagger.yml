@@ -1,11 +1,11 @@
 swagger: "2.0"
 info:
-  title: beego Test API
-  description: beego has a very cool tools to autogenerate documents for your API
+  title: what's this API
+  description: enstrong your heart
   version: 1.0.0
-  termsOfService: http://beego.me/
+  termsOfService: http://www.ikohoo.com/
   contact:
-    email: astaxie@gmail.com
+    email: cucmeliu@gmail.com
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -48,6 +48,25 @@ paths:
           description: '{int} models.User'
         "403":
           description: body is empty
+  /plant/{id}:
+    get:
+      tags:
+      - plant
+      description: get User by id
+      operationId: PlantController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: The key for staticblock
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.User'
+        "403":
+          description: :id is empty
   /rec_logs/:
     get:
       tags:

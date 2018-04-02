@@ -1,8 +1,8 @@
 // @APIVersion 1.0.0
-// @Title beego Test API
-// @Description beego has a very cool tools to autogenerate documents for your API
-// @Contact astaxie@gmail.com
-// @TermsOfServiceUrl http://beego.me/
+// @Title what's this API
+// @Description enstrong your heart
+// @Contact cucmeliu@gmail.com
+// @TermsOfServiceUrl http://www.ikohoo.com/
 // @License Apache 2.0
 // @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
 package routers

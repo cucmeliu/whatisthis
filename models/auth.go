@@ -11,11 +11,11 @@ import (
 	//	"strings"
 )
 
-func GetToken() (token string) {
-	return "24.b9078a2dc2ab60bc670d1babcf965b90.2592000.1519294427.282335-10736267"
+func GetAccessToken() (token string) {
+	return "24.c8ba437bc242d78c0961d7b02fd02478.2592000.1525251606.282335-10736267"
 }
 
 func main() {
-	fmt.Println(GetToken())
+	fmt.Println(GetAccessToken())
 	//	httpGet()
 }

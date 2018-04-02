@@ -37,6 +37,7 @@ func HttpPost(url string, params map[string]string) (response string, err error)
 	for k, v := range params {
 		str += k + "=" + v
 	}
+	fmt.Println("paramstr: ", str)
 
 	resp, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(str))
 

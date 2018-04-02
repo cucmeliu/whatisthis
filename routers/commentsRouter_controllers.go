@@ -23,6 +23,14 @@ func init() {
 			MethodParams: param.Make(),
 			Params: nil})
 
+	beego.GlobalControllerRouter["github.com/cucmeliu/whatisthis/controllers:PlantController"] = append(beego.GlobalControllerRouter["github.com/cucmeliu/whatisthis/controllers:PlantController"],
+		beego.ControllerComments{
+			Method: "Get",
+			Router: `/:id`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams: param.Make(),
+			Params: nil})
+
 	beego.GlobalControllerRouter["github.com/cucmeliu/whatisthis/controllers:RecLogsController"] = append(beego.GlobalControllerRouter["github.com/cucmeliu/whatisthis/controllers:RecLogsController"],
 		beego.ControllerComments{
 			Method: "Post",
