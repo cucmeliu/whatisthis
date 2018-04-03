@@ -33,11 +33,18 @@ func httpGet(url string) (response string) {
 
 func HttpPost(url string, params map[string]string) (response string, err error) {
 
-	str := ""
+	paramstr := ""
 	for k, v := range params {
-		str += k + "=" + v
+		paramstr += k + "=" + v + "&"
 	}
-	fmt.Println("paramstr: ", str)
+	// 去掉最后一个 & 符号
+	paramstr = paramstr[:len(paramstr)-1]
+	fmt.Println("paramstr: ", paramstr)
+
+	// URLEncode
+	str := "http://leo.liu/?" + paramstr
+	ps, err := url.Parse(str)
+	str = strings.Split(ps.Query().Encode(), "=")[1]
 
 	resp, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(str))
 

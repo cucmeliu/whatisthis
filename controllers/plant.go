@@ -3,6 +3,8 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
+	"net/url"
+	"strings"
 
 	"github.com/astaxie/beego"
 	"github.com/cucmeliu/whatisthis/models"
@@ -62,21 +64,24 @@ func (c *PlantController) Post() {
 		c.RecogPlant(token, &v)
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
-		c.Ctx.WriteString(v.Img_base64)
+		// c.Ctx.WriteString(v.Img_base64)
 	} else {
 		c.Data["json"] = err.Error()
-		fmt.Println("err.", err)
+		fmt.Println("errrrrrr.", err)
 	}
 
 	c.ServeJSON()
 }
 
 func (this *PlantController) RecogPlant(access_token string, rec_rst *models.Plant) {
-	url := "https://aip.baidubce.com/rest/2.0/image-classify/v1/plant?access_token=" + access_token
+	urlstr := "https://aip.baidubce.com/rest/2.0/image-classify/v1/plant?access_token=" + access_token
 	params := make(map[string]string)
+	//	str := "http://leo.liu/?image=" + rec_rst.Img_base64
+	//	ps, err := url.Parse(str)
+	//	params["image"] = strings.Split(ps.Query().Encode(), "=")[1]
 	params["image"] = rec_rst.Img_base64
 
-	resp_str, err := utils.HttpPost(url, params)
+	resp_str, err := utils.HttpPost(urlstr, params)
 	fmt.Println("resp: ", resp_str)
 	_ = json.Unmarshal([]byte(resp_str), &rec_rst)
 
@@ -84,5 +89,4 @@ func (this *PlantController) RecogPlant(access_token string, rec_rst *models.Pla
 		fmt.Println("encoded err", err)
 		panic(err)
 	}
-
 }
