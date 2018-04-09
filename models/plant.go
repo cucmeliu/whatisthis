@@ -1,10 +1,18 @@
 package models
 
 type Plant struct {
-	// User_token string
+	User_token string
 	Img_base64 string
-	name       string
-	score      float32
+}
+
+type PlantResult struct {
+	Log_id int64       `json:"log_id"`
+	Result []oneResult `json:"result"`
+}
+
+type oneResult struct {
+	Name  string  `json:"name"`
+	Score float32 `json:"score"`
 }
 
 // 返回格式为：
@@ -33,10 +41,3 @@ type Plant struct {
 // 		}
 // 	]
 // }
-
-//func RecognizePlant(access_token string, img_base64 string) {
-//  const req_url = "https://aip.baidubce.com/rest/2.0/image-classify/v1/plant"
-
-//  params = {"image":img}
-
-//}

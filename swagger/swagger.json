@@ -456,12 +456,8 @@
                 "Img_base64": {
                     "type": "string"
                 },
-                "name": {
+                "User_token": {
                     "type": "string"
-                },
-                "score": {
-                    "type": "number",
-                    "format": "float"
                 }
             }
         },

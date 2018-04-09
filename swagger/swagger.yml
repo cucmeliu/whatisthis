@@ -304,11 +304,8 @@ definitions:
     properties:
       Img_base64:
         type: string
-      name:
+      User_token:
         type: string
-      score:
-        type: number
-        format: float
   models.RecLogs:
     title: RecLogs
     type: object

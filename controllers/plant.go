@@ -3,8 +3,6 @@ package controllers
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
-	"strings"
 
 	"github.com/astaxie/beego"
 	"github.com/cucmeliu/whatisthis/models"
@@ -35,17 +33,7 @@ func (c *PlantController) Get() {
 	c.Data["Email"] = "astaxie@gmail.com"
 
 	fmt.Println("get smt")
-	//c.TplName = "views/index.tpl"
 	c.Ctx.WriteString(models.GetAccessToken())
-
-	//c.ServeJSON()
-	//	var param models.Param_rec
-	//	param.User_token = this.GetString("user_token")
-	//	param.Src_base64 = this.GetString("src_base64")
-	//	if param.User_token == "" || param.Src_base64 == "" {
-	//		this.Ctx.WriteString("param is wrong")
-	//		return
-	//	}
 
 }
 
@@ -57,36 +45,39 @@ func (c *PlantController) Get() {
 // @Failure 403 body is empty
 // @router / [post]
 func (c *PlantController) Post() {
-	var v models.Plant
+	var p models.Plant
+
 	token := models.GetAccessToken()
 
-	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
-		c.RecogPlant(token, &v)
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &p); err == nil {
+		var v models.PlantResult
+		c.RecogPlant(token, &p, &v)
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
-		// c.Ctx.WriteString(v.Img_base64)
 	} else {
 		c.Data["json"] = err.Error()
-		fmt.Println("errrrrrr.", err)
+		fmt.Println("Unmarshal Request Body: ", err)
 	}
 
 	c.ServeJSON()
 }
 
-func (this *PlantController) RecogPlant(access_token string, rec_rst *models.Plant) {
+func (this *PlantController) RecogPlant(access_token string, rec_rst *models.Plant, v *models.PlantResult) {
 	urlstr := "https://aip.baidubce.com/rest/2.0/image-classify/v1/plant?access_token=" + access_token
 	params := make(map[string]string)
-	//	str := "http://leo.liu/?image=" + rec_rst.Img_base64
-	//	ps, err := url.Parse(str)
-	//	params["image"] = strings.Split(ps.Query().Encode(), "=")[1]
 	params["image"] = rec_rst.Img_base64
 
 	resp_str, err := utils.HttpPost(urlstr, params)
+	if err != nil {
+		fmt.Println("post err, ", err)
+	}
 	fmt.Println("resp: ", resp_str)
-	_ = json.Unmarshal([]byte(resp_str), &rec_rst)
 
-	if err == nil {
-		fmt.Println("encoded err", err)
+	// var v *models.PlantResult
+	if err := json.Unmarshal([]byte(resp_str), &v); err == nil {
+		fmt.Println(v)
+	} else {
+		fmt.Println("Unmarshal Response, ", err)
 		panic(err)
 	}
 }

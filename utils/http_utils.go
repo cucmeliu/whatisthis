@@ -1,6 +1,7 @@
 package utils
 
 import (
+
 	//	"bytes"
 	//	"encoding/json"
 	"fmt"
@@ -31,22 +32,29 @@ func httpGet(url string) (response string) {
 
 }
 
-func HttpPost(url string, params map[string]string) (response string, err error) {
+func HttpPost(urlstr string, params map[string]string) (response string, err error) {
 
 	paramstr := ""
 	for k, v := range params {
-		paramstr += k + "=" + v + "&"
+		paramstr += k + "=" + url.QueryEscape(v) + "&"
 	}
+
 	// 去掉最后一个 & 符号
 	paramstr = paramstr[:len(paramstr)-1]
-	fmt.Println("paramstr: ", paramstr)
 
-	// URLEncode
-	str := "http://leo.liu/?" + paramstr
-	ps, err := url.Parse(str)
-	str = strings.Split(ps.Query().Encode(), "=")[1]
+	// Go里一个巨大的坑，特殊字符UrlEncode后，%后的是大写的，不是小写的。。。。
+	c := []byte(paramstr)
+	for i := 0; i < len(c); i++ {
+		if rune(c[i]) == '%' {
+			if c[i+2] >= 65 && c[i+2] <= 90 {
+				c[i+2] = c[i+2] + 32
+			}
+		}
+	}
 
-	resp, err := http.Post(url, "application/x-www-form-urlencoded", strings.NewReader(str))
+	str := string(c)
+
+	resp, err := http.Post(urlstr, "application/x-www-form-urlencoded", strings.NewReader(str))
 
 	if err != nil {
 		fmt.Println("post err", err)
